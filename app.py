@@ -1,6 +1,7 @@
 import os
 import csv
 import io
+import shutil
 import hashlib
 import logging
 from pathlib import Path
@@ -147,11 +148,16 @@ def upload_resumes():
                 session.add(candidate)
                 session.flush()  # Generate candidate ID
 
-                # Add Skills
+                # Add Skills (deduplicated by name)
+                seen_skills = set()
                 for skill_info in parsed_data.get("skills", []):
+                    s_name = skill_info.get("name", "").strip()
+                    if not s_name or s_name.lower() in seen_skills:
+                        continue
+                    seen_skills.add(s_name.lower())
                     skill_obj = CandidateSkill(
                         candidate_id=candidate.id,
-                        skill_name=skill_info["name"],
+                        skill_name=s_name,
                         category=skill_info.get("category", "General")
                     )
                     session.add(skill_obj)
@@ -632,6 +638,13 @@ def seed_sample_candidates():
     session = SessionLocal()
     seeded = []
     try:
+        if not samples_dir.exists():
+            return jsonify({
+                "success": False,
+                "message": "Sample resumes directory not found.",
+                "seeded": []
+            }), 404
+
         for file_path in samples_dir.glob("*.*"):
             if file_path.suffix.lower() in [".pdf", ".docx"]:
                 existing = session.query(Candidate).filter(Candidate.file_name == file_path.name).first()
@@ -640,6 +653,15 @@ def seed_sample_candidates():
                 raw_text = extract_text_from_file(str(file_path))
                 if not raw_text.strip():
                     continue
+
+                # Ensure copy exists in upload folder
+                upload_dest = Config.UPLOAD_FOLDER / file_path.name
+                if not upload_dest.exists():
+                    shutil.copy2(file_path, upload_dest)
+
+                file_bytes = file_path.read_bytes()
+                file_hash = calculate_file_hash(file_bytes)
+
                 parsed_data = resume_parser.parse(raw_text)
                 candidate = Candidate(
                     name=parsed_data.get("name", "Unknown"),
@@ -653,16 +675,24 @@ def seed_sample_candidates():
                     summary=parsed_data.get("summary", ""),
                     raw_text=raw_text,
                     file_name=file_path.name,
+                    file_path=file_path.name,
+                    file_hash=file_hash,
                     file_type=file_path.suffix.lower().replace(".", ""),
-                    status="New"
+                    status="New",
+                    parsed_at=datetime.utcnow()
                 )
                 session.add(candidate)
                 session.flush()
 
+                seen_skills = set()
                 for s_dict in parsed_data.get("skills", []):
+                    s_name = s_dict.get("name", "").strip()
+                    if not s_name or s_name.lower() in seen_skills:
+                        continue
+                    seen_skills.add(s_name.lower())
                     session.add(CandidateSkill(
                         candidate_id=candidate.id,
-                        name=s_dict["name"],
+                        skill_name=s_name,
                         category=s_dict.get("category", "General")
                     ))
 
@@ -672,8 +702,8 @@ def seed_sample_candidates():
                         degree=e_dict.get("degree", ""),
                         field_of_study=e_dict.get("field_of_study", ""),
                         institution=e_dict.get("institution", ""),
-                        start_year=e_dict.get("start_year"),
-                        end_year=e_dict.get("end_year"),
+                        start_year=str(e_dict.get("start_year")) if e_dict.get("start_year") else None,
+                        end_year=str(e_dict.get("end_year")) if e_dict.get("end_year") else None,
                         grade=e_dict.get("grade")
                     ))
 
@@ -683,8 +713,8 @@ def seed_sample_candidates():
                         job_title=x_dict.get("job_title", ""),
                         company=x_dict.get("company", ""),
                         location=x_dict.get("location"),
-                        start_date=x_dict.get("start_date"),
-                        end_date=x_dict.get("end_date"),
+                        start_date=str(x_dict.get("start_date")) if x_dict.get("start_date") else None,
+                        end_date=str(x_dict.get("end_date")) if x_dict.get("end_date") else None,
                         description=x_dict.get("description", ""),
                         is_current=x_dict.get("is_current", False)
                     ))
@@ -697,6 +727,13 @@ def seed_sample_candidates():
             "message": f"Successfully loaded {len(seeded)} demo candidate profiles." if seeded else "Demo candidates already loaded in database.",
             "seeded": seeded
         })
+    except Exception as e:
+        session.rollback()
+        logger.exception("Error in seed_sample_candidates")
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
     finally:
         session.close()
 
