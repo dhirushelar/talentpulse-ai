@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="static/css/style.css">
+    <!-- Favicon: Official TalentPulse AI Logo -->
+    <link rel="icon" type="image/jpeg" href="/static/images/talentpulse-logo.jpg">
+    <link rel="shortcut icon" href="static/images/talentpulse-logo.jpg">
     <!-- Chart.js with Fallback -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -32,15 +35,16 @@
         <div class="tp-nav-container">
             <!-- Brand Logo -->
             <a href="#" class="brand-wrapper">
-                <div class="brand-icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                </div>
+                <img src="/static/images/talentpulse-logo.jpg" alt="TalentPulse AI" class="brand-app-logo">
                 <div>
                     <div class="brand-title">
                         <span>Talent<span class="gradient-text">Pulse</span></span>
                         <span class="ai-chip">AI</span>
                     </div>
-                    <div class="brand-subtitle">Autonomous Resume Parser & Talent Analytics</div>
+                    <div class="brand-subtitle" style="display: flex; align-items: center; gap: 0.4rem;">
+                        <img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-inline">
+                        <span>A SVASTIK UNIVERSE Initiative</span>
+                    </div>
                 </div>
             </a>
 
@@ -108,8 +112,8 @@
             <div class="bento-card">
                 <div class="kpi-header">
                     <span class="kpi-title">Dominant Competency</span>
-                    <div class="kpi-icon-badge badge-emerald">
-                        ⚡
+                    <div class="kpi-icon-badge badge-emerald" style="display: flex; align-items: center; justify-content: center;">
+                        <img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-icon">
                     </div>
                 </div>
                 <div class="kpi-number" id="kpiTopSkill" style="font-size: 1.8rem;">-</div>
@@ -182,8 +186,9 @@
                             <button id="clearQueueBtn" style="background: none; border: none; color: var(--accent-rose); cursor: pointer; font-size: 0.75rem;">Clear All</button>
                         </div>
                         <ul id="fileQueueList" class="queue-list"></ul>
-                        <button id="startUploadBtn" class="tp-btn tp-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
-                            <span>⚡ Extract & Index Resumes</span>
+                        <button id="startUploadBtn" class="tp-btn tp-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-icon">
+                            <span>Extract & Index Resumes</span>
                         </button>
                     </div>
 
@@ -297,7 +302,7 @@
 
                     <!-- JD Match Banner -->
                     <div id="matchBanner" style="display: none; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.78rem; color: var(--accent-amber);">
-                        <span>⚡ JD Fit Match Active</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.35rem;"><img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-inline"> JD Fit Match Active</span>
                         <button id="clearMatchBtn" style="background: none; border: none; color: var(--accent-amber); cursor: pointer;">✕</button>
                     </div>
                 </div>
@@ -335,11 +340,12 @@
                 <!-- Column 1: Brand & Svastik Universe -->
                 <div class="footer-brand">
                     <div class="footer-brand-title">
-                        <div class="brand-logo-glow" style="width: 36px; height: 36px; border-radius: 10px; font-size: 1.1rem;">⚡</div>
+                        <img src="/static/images/talentpulse-logo.jpg" class="brand-app-logo" style="width: 42px; height: 42px;" alt="TalentPulse AI">
                         <span>TalentPulse <span class="gradient-text">AI</span></span>
                     </div>
                     <div class="footer-universe-badge">
-                        <span>✨</span> SVASTIK UNIVERSE INITIATIVE
+                        <img src="/static/images/svastik-universe-logo.png" class="svastik-logo-icon" alt="Svastik Universe">
+                        <span>SVASTIK UNIVERSE INITIATIVE</span>
                     </div>
                     <p class="footer-desc">
                         Pioneering autonomous resume comprehension, neural candidate indexing, and semantic workforce analytics. Built with high-precision spaCy natural language processing and resilient database architectures.
@@ -492,7 +498,8 @@
         <div class="tp-modal-box" style="max-width: 700px;">
             <div class="tp-modal-header">
                 <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="color: var(--accent-amber);">⚡</span> AI Job Description Fit Matcher
+                    <img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-icon">
+                    <span>AI Job Description Fit Matcher</span>
                 </h4>
                 <button class="tp-btn-icon modal-close-btn" data-modal="jdMatchModal">✕</button>
             </div>
@@ -504,8 +511,9 @@
             </div>
             <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 0.75rem; color: var(--text-dim);">Evaluates competencies & experience density</span>
-                <button id="runJdMatchBtn" class="tp-btn tp-btn-primary">
-                    <span>⚡ Calculate Fit Scores</span>
+                <button id="runJdMatchBtn" class="tp-btn tp-btn-primary" style="display: flex; align-items: center; gap: 0.4rem;">
+                    <img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-icon">
+                    <span>Calculate Fit Scores</span>
                 </button>
             </div>
         </div>
@@ -532,7 +540,7 @@
         <div class="tp-modal-box" style="max-width: 800px;">
             <div class="tp-modal-header">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div class="brand-logo-glow" style="width: 38px; height: 38px; border-radius: 10px; font-size: 1.1rem;">📜</div>
+                    <img src="/static/images/svastik-universe-logo.png" style="width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.45));" alt="Svastik Universe">
                     <div>
                         <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800;">Terms & Conditions</h4>
                         <span style="font-size: 0.72rem; color: var(--accent-purple); font-weight: 700;">SVASTIK UNIVERSE • LEGAL FRAMEWORK</span>
@@ -583,7 +591,7 @@
         <div class="tp-modal-box" style="max-width: 800px;">
             <div class="tp-modal-header">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div class="brand-logo-glow" style="width: 38px; height: 38px; border-radius: 10px; font-size: 1.1rem;">🔒</div>
+                    <img src="/static/images/svastik-universe-logo.png" style="width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.45));" alt="Svastik Universe">
                     <div>
                         <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800;">Privacy & Candidate Rights</h4>
                         <span style="font-size: 0.72rem; color: var(--accent-emerald); font-weight: 700;">SVASTIK UNIVERSE • DATA GOVERNANCE</span>

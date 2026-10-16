@@ -1,7 +1,16 @@
 <div align="center">
 
-# ⚡ TalentPulse AI
+<a href="https://github.com/dhirushelar/talentpulse-ai">
+  <img src="static/images/talentpulse-logo.jpg" alt="TalentPulse AI Logo" width="140" style="border-radius: 50%; box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);" />
+</a>
+
+# TalentPulse AI
 ### Autonomous Resume Intelligence & Neural Talent Analytics Platform
+
+<p align="center">
+  <img src="static/images/svastik-universe-logo.png" alt="Svastik Universe Logo" width="28" style="vertical-align: middle;" />
+  <b>A Proprietary Initiative by SVASTIK UNIVERSE</b>
+</p>
 
 > **Transform unstructured career documents into high-fidelity, searchable talent intelligence using Python (spaCy, PDFPlumber, PyPDF), Flask REST, and PostgreSQL.**
 

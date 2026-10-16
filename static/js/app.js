@@ -569,8 +569,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (c.match_score !== undefined) {
             const scoreClass = c.match_score >= 70 ? "score-high" : (c.match_score >= 40 ? "score-med" : "score-low");
             matchScoreHtml = `
-                <div class="fit-score-pill ${scoreClass}">
-                    ⚡ ${c.match_score}% Fit
+                <div class="fit-score-pill ${scoreClass}" style="display:inline-flex;align-items:center;gap:0.35rem;">
+                    <img src="/static/images/svastik-universe-logo.png" class="svastik-logo-inline" alt="Score">
+                    <span>${c.match_score}% Fit</span>
                 </div>
             `;
         }
@@ -838,7 +839,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             runJdMatchBtn.disabled = true;
-            runJdMatchBtn.textContent = "⚡ Evaluating Fit...";
+            runJdMatchBtn.innerHTML = '<img src="/static/images/svastik-universe-logo.png" class="svastik-logo-icon" style="margin-right:0.4rem;"> <span>Evaluating Fit...</span>';
 
             try {
                 const res = await fetch(`${API_BASE}/api/match-jd`, {
@@ -866,7 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Error connecting to backend: " + e.message);
             } finally {
                 runJdMatchBtn.disabled = false;
-                runJdMatchBtn.textContent = "⚡ Calculate Fit Scores";
+                runJdMatchBtn.innerHTML = '<img src="/static/images/svastik-universe-logo.png" class="svastik-logo-icon" style="margin-right:0.4rem;"> <span>Calculate Fit Scores</span>';
             }
         });
     }
