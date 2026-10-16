@@ -204,6 +204,39 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
+        // 1-Click Load Demo Profiles
+        const loadDemoBtn = document.getElementById("loadDemoBtn");
+        const navLoadDemoBtn = document.getElementById("navLoadDemoBtn");
+
+        async function handleLoadDemo() {
+            const btn = loadDemoBtn || navLoadDemoBtn;
+            const originalText = btn ? btn.innerHTML : "";
+            if (btn) {
+                btn.innerHTML = `<img src="/static/images/svastik-universe-logo.png" class="svastik-logo-icon" style="animation: livePulse 1s infinite;"> <span>Loading Profiles...</span>`;
+                btn.disabled = true;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/seed`, { method: "POST" });
+                const data = await res.json();
+                if (window.confetti) {
+                    window.confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+                }
+                loadCandidates();
+                loadStats();
+            } catch (e) {
+                alert("Failed to load demo candidates: " + e.message);
+            } finally {
+                if (btn) {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        if (loadDemoBtn) loadDemoBtn.addEventListener("click", handleLoadDemo);
+        if (navLoadDemoBtn) navLoadDemoBtn.addEventListener("click", handleLoadDemo);
+
         document.querySelectorAll(".tp-modal-overlay").forEach(overlay => {
             overlay.addEventListener("click", (e) => {
                 if (e.target === overlay) {

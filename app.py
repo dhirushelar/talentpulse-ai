@@ -10,7 +10,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from sqlalchemy import or_, and_, desc, asc, func
 
-from config import Config
+from config import Config, BASE_DIR
 from database import engine, SessionLocal, init_db, DB_DIALECT
 from models import Candidate, CandidateSkill, CandidateEducation, CandidateExperience
 from parser.extractor import extract_text_from_file
@@ -623,6 +623,83 @@ def export_candidates_json():
         return jsonify([c.to_dict(include_raw=False) for c in candidates])
     finally:
         session.close()
+
+
+@app.route("/api/seed", methods=["GET", "POST"])
+def seed_sample_candidates():
+    """Seeds default sample candidates from sample_resumes into database."""
+    samples_dir = BASE_DIR / "sample_resumes"
+    session = SessionLocal()
+    seeded = []
+    try:
+        for file_path in samples_dir.glob("*.*"):
+            if file_path.suffix.lower() in [".pdf", ".docx"]:
+                existing = session.query(Candidate).filter(Candidate.file_name == file_path.name).first()
+                if existing:
+                    continue
+                raw_text = extract_text_from_file(str(file_path))
+                if not raw_text.strip():
+                    continue
+                parsed_data = resume_parser.parse(raw_text)
+                candidate = Candidate(
+                    name=parsed_data.get("name", "Unknown"),
+                    email=parsed_data.get("email", ""),
+                    phone=parsed_data.get("phone", ""),
+                    location=parsed_data.get("location", ""),
+                    linkedin_url=parsed_data.get("linkedin_url"),
+                    github_url=parsed_data.get("github_url"),
+                    portfolio_url=parsed_data.get("portfolio_url"),
+                    total_experience_years=parsed_data.get("total_experience_years", 0.0),
+                    summary=parsed_data.get("summary", ""),
+                    raw_text=raw_text,
+                    file_name=file_path.name,
+                    file_type=file_path.suffix.lower().replace(".", ""),
+                    status="New"
+                )
+                session.add(candidate)
+                session.flush()
+
+                for s_dict in parsed_data.get("skills", []):
+                    session.add(CandidateSkill(
+                        candidate_id=candidate.id,
+                        name=s_dict["name"],
+                        category=s_dict.get("category", "General")
+                    ))
+
+                for e_dict in parsed_data.get("education", []):
+                    session.add(CandidateEducation(
+                        candidate_id=candidate.id,
+                        degree=e_dict.get("degree", ""),
+                        field_of_study=e_dict.get("field_of_study", ""),
+                        institution=e_dict.get("institution", ""),
+                        start_year=e_dict.get("start_year"),
+                        end_year=e_dict.get("end_year"),
+                        grade=e_dict.get("grade")
+                    ))
+
+                for x_dict in parsed_data.get("experience", []):
+                    session.add(CandidateExperience(
+                        candidate_id=candidate.id,
+                        job_title=x_dict.get("job_title", ""),
+                        company=x_dict.get("company", ""),
+                        location=x_dict.get("location"),
+                        start_date=x_dict.get("start_date"),
+                        end_date=x_dict.get("end_date"),
+                        description=x_dict.get("description", ""),
+                        is_current=x_dict.get("is_current", False)
+                    ))
+
+                session.commit()
+                seeded.append(candidate.name)
+
+        return jsonify({
+            "success": True,
+            "message": f"Successfully loaded {len(seeded)} demo candidate profiles." if seeded else "Demo candidates already loaded in database.",
+            "seeded": seeded
+        })
+    finally:
+        session.close()
+
 
 
 if __name__ == "__main__":

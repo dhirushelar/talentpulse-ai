@@ -75,6 +75,12 @@
                     <span>Export CSV</span>
                 </a>
 
+                <!-- Seed Demo Data Button -->
+                <button id="navLoadDemoBtn" class="tp-btn tp-btn-glass" title="Load sample candidate resumes">
+                    <img src="/static/images/svastik-universe-logo.png" alt="Svastik" class="svastik-logo-icon">
+                    <span>Demo Data</span>
+                </button>
+
                 <!-- Dark / Light Mode Switcher -->
                 <button id="themeToggleBtn" class="tp-btn-icon" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
                     <span id="themeIcon">☀️</span>
@@ -317,10 +323,16 @@
                 <div id="candidatesEmptyState" class="bento-card" style="text-align: center; padding: 3rem 1.5rem;">
                     <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📂</div>
                     <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 0.35rem;">No Candidate Profiles Found</h4>
-                    <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0 0 1.25rem;">Upload resumes above or seed test samples to explore candidate profiles.</p>
-                    <label for="resumeFileInput" class="tp-btn tp-btn-primary" style="display: inline-flex; cursor: pointer;">
-                        <span>Upload First Resume</span>
-                    </label>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0 0 1.25rem;">Upload resumes above or load pre-built demo profiles to explore candidate intelligence instantly.</p>
+                    <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+                        <label for="resumeFileInput" class="tp-btn tp-btn-primary" style="display: inline-flex; cursor: pointer;">
+                            <span>Upload First Resume</span>
+                        </label>
+                        <button id="loadDemoBtn" class="tp-btn tp-btn-glass" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <img src="/static/images/svastik-universe-logo.png" alt="Svastik Universe" class="svastik-logo-icon">
+                            <span>Load Demo Profiles</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Candidates List -->

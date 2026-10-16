@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 
 class Config:
+    BASE_DIR = BASE_DIR
     SECRET_KEY = os.getenv("SECRET_KEY", "resume-parser-secret-key-2026")
     
     # Database configuration
