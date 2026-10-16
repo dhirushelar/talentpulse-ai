@@ -16,63 +16,10 @@
 [![License](https://img.shields.io/badge/Copyright-SVASTIK%20UNIVERSE-8B5CF6?style=for-the-badge)](https://github.com/dhirushelar/talentpulse-ai)
 
 <br/>
-
-[🚀 Live Cloud Deployment](#-live-cloud-deployment-not-localhost) • [✨ Core Features](#-core-capabilities) • [🏗️ Architecture](#-system-architecture) • [🧪 Test Verification](#-automated-testing) • [📡 REST API](#-rest-api-documentation) • [🏛️ SVASTIK UNIVERSE](#-governance-legal--copyright)
-
----
-
 </div>
 
 <br/>
 
-## 🌐 Live Cloud Deployment (Not Localhost!)
-
-TalentPulse AI is pre-configured with **`render.yaml`**, **`Procfile`**, and **`requirements.txt`** for **1-click cloud deployment** on production servers with automatic HTTPS, global CDN, and zero localhost dependency.
-
-### Option 1: 1-Click Free Deploy on Render.com (Recommended)
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/dhirushelar/talentpulse-ai)
-
-1. Click the **Deploy to Render** button above (or visit [render.com](https://render.com) and click **New +** > **Web Service**).
-2. Connect your GitHub repository: `https://github.com/dhirushelar/talentpulse-ai`.
-3. Render automatically detects `render.yaml` and sets:
-   - **Environment:** `Python 3.11`
-   - **Build Command:** `pip install -r requirements.txt && python -m spacy download en_core_web_sm`
-   - **Start Command:** `gunicorn app:app`
-4. Click **Create Web Service**. Your app is live within 2 minutes at:
-   ```
-   https://talentpulse-ai.onrender.com
-   ```
-
----
-
-### Option 2: Deploy on Railway.app
-
-1. Go to [railway.app](https://railway.app) and click **"New Project"** > **"Deploy from GitHub repo"**.
-2. Select `dhirushelar/talentpulse-ai`.
-3. Add environment variable:
-   - `USE_SQLITE_FALLBACK` = `true`
-4. Railway builds and exposes your public HTTPS endpoint automatically!
-
----
-
-### Option 3: Deploy with Docker
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/dhirushelar/talentpulse-ai.git
-cd talentpulse-ai
-
-# 2. Launch production stack with PostgreSQL container
-docker compose up -d
-
-# 3. Access the dashboard
-http://localhost:5000
-```
-
-<br/>
-
----
 
 ## 🚀 Overview
 
