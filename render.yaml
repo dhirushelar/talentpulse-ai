@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: talentpulse-ai
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt && python -m spacy download en_core_web_sm
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: USE_SQLITE_FALLBACK
+        value: "true"
+      - key: SPACY_MODEL
+        value: en_core_web_sm
+      - key: PYTHON_VERSION
+        value: 3.11.9
