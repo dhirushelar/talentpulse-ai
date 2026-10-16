@@ -326,6 +326,89 @@
 
     </main>
 
+    <!-- =========================================================
+         Modern Animated Footer — SVASTIK UNIVERSE
+         ========================================================= -->
+    <footer class="tp-footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <!-- Column 1: Brand & Svastik Universe -->
+                <div class="footer-brand">
+                    <div class="footer-brand-title">
+                        <div class="brand-logo-glow" style="width: 36px; height: 36px; border-radius: 10px; font-size: 1.1rem;">⚡</div>
+                        <span>TalentPulse <span class="gradient-text">AI</span></span>
+                    </div>
+                    <div class="footer-universe-badge">
+                        <span>✨</span> SVASTIK UNIVERSE INITIATIVE
+                    </div>
+                    <p class="footer-desc">
+                        Pioneering autonomous resume comprehension, neural candidate indexing, and semantic workforce analytics. Built with high-precision spaCy natural language processing and resilient database architectures.
+                    </p>
+                    <div class="footer-status-indicator">
+                        <span class="status-dot-pulse"></span>
+                        <span>Neural Parser Operational • All Engines Active</span>
+                    </div>
+                </div>
+
+                <!-- Column 2: Platform Features -->
+                <div>
+                    <h5 class="footer-heading">
+                        <span>🚀</span> Core Capabilities
+                    </h5>
+                    <ul class="footer-links">
+                        <li><a href="#uploadSection"><span>⚡</span> Dual-Engine Resume Parsing</a></li>
+                        <li><a href="#feedSection"><span>🎯</span> 500+ Skill Taxonomy</a></li>
+                        <li><button type="button" class="footer-open-jd-btn"><span>🔍</span> AI Job Description Matcher</button></li>
+                        <li><button type="button" class="footer-open-compare-btn"><span>⚖️</span> Multi-Candidate Matrix</button></li>
+                        <li><a href="/api/export/csv" download><span>📊</span> Tabular CSV Export</a></li>
+                        <li><a href="/api/export/json" download><span>💾</span> Relational JSON Export</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Tech Stack & Architecture -->
+                <div>
+                    <h5 class="footer-heading">
+                        <span>🛠️</span> Engineering
+                    </h5>
+                    <ul class="footer-links">
+                        <li><a href="https://spacy.io" target="_blank" rel="noopener"><span>🧠</span> spaCy NLP Pipeline</a></li>
+                        <li><a href="https://flask.palletsprojects.com" target="_blank" rel="noopener"><span>🐍</span> Python 3.11 & Flask REST</a></li>
+                        <li><a href="https://www.postgresql.org" target="_blank" rel="noopener"><span>🐘</span> PostgreSQL & SQLite Fallback</a></li>
+                        <li><a href="https://github.com/jsvine/pdfplumber" target="_blank" rel="noopener"><span>📄</span> PDFPlumber & PyPDF Dual-Engine</a></li>
+                        <li><a href="https://www.chartjs.org" target="_blank" rel="noopener"><span>📈</span> Dynamic Chart.js Analytics</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Legal & Compliance -->
+                <div>
+                    <h5 class="footer-heading">
+                        <span>⚖️</span> Legal & Governance
+                    </h5>
+                    <ul class="footer-links">
+                        <li><button type="button" id="openTermsModalBtn"><span>📜</span> Terms & Conditions</button></li>
+                        <li><button type="button" id="openPrivacyModalBtn"><span>🔒</span> Privacy & Candidate Rights</button></li>
+                        <li><a href="javascript:void(0)" onclick="alert('TalentPulse AI adheres to strict data minimization principles. Candidate resumes are processed strictly for recruitment scoring without third-party data broker distribution.')"><span>🛡️</span> Data Security Protocol</a></li>
+                        <li><a href="https://github.com" target="_blank" rel="noopener"><span>🐙</span> GitHub Open Source</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Strip -->
+            <div class="footer-bottom-bar">
+                <div class="footer-copyright">
+                    <span>© 2026 <strong>SVASTIK UNIVERSE</strong>. All Rights Reserved.</span>
+                    <span style="opacity: 0.5;">•</span>
+                    <span style="font-size: 0.78rem;">Autonomous Talent Screening & Neural Data Parsing</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button type="button" class="back-to-top-btn" id="backToTopBtn">
+                        <span>↑</span> Back to Top
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <!-- 1. Candidate Full Profile Modal Overlay -->
     <div id="candidateModal" class="tp-modal-overlay">
         <div class="tp-modal-box">
@@ -440,6 +523,91 @@
             <div class="tp-modal-body" id="compareMatrixContainer"></div>
             <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: flex-end;">
                 <button class="tp-btn tp-btn-glass modal-close-btn" data-modal="compareModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Terms and Conditions Modal Overlay — SVASTIK UNIVERSE -->
+    <div id="termsModal" class="tp-modal-overlay">
+        <div class="tp-modal-box" style="max-width: 800px;">
+            <div class="tp-modal-header">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="brand-logo-glow" style="width: 38px; height: 38px; border-radius: 10px; font-size: 1.1rem;">📜</div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800;">Terms & Conditions</h4>
+                        <span style="font-size: 0.72rem; color: var(--accent-purple); font-weight: 700;">SVASTIK UNIVERSE • LEGAL FRAMEWORK</span>
+                    </div>
+                </div>
+                <button class="tp-btn-icon modal-close-btn" data-modal="termsModal">✕</button>
+            </div>
+            <div class="tp-modal-body" style="max-height: 65vh; overflow-y: auto;">
+                <div class="terms-clause">
+                    <h6><span>1.</span> Acceptance of Terms</h6>
+                    <p>By accessing, deploying, or utilizing <strong>TalentPulse AI</strong>, you agree to be bound by these Terms and Conditions established by <strong>SVASTIK UNIVERSE</strong>. If you do not agree to these terms, you must discontinue use of the platform immediately.</p>
+                </div>
+
+                <div class="terms-clause">
+                    <h6><span>2.</span> Proprietary Rights & Intellectual Property</h6>
+                    <p>All software architecture, neural extraction pipelines, user interfaces, branding, trademarks, documentation, and source code are the exclusive intellectual property of <strong>SVASTIK UNIVERSE</strong>. All Rights Reserved. Unauthorized commercial redistribution or reverse engineering without prior written authorization is strictly prohibited.</p>
+                </div>
+
+                <div class="terms-clause">
+                    <h6><span>3.</span> Candidate Data Protection & Privacy</h6>
+                    <p>TalentPulse AI processes resume files (PDF, DOCX, TXT) solely for candidate skill indexing, structured entity extraction, and recruitment analytics. <strong>SVASTIK UNIVERSE</strong> does not sell, rent, or distribute parsed resume records or personally identifiable information (PII) to unauthorized third-party commercial networks.</p>
+                </div>
+
+                <div class="terms-clause">
+                    <h6><span>4.</span> Permitted & Acceptable Use</h6>
+                    <p>Users agree to upload only legitimate career documents and resumes for valid recruiting and human capital workflows. You agree not to upload malicious binaries, harmful payloads, corrupted archives, or attempt denial-of-service operations against the parsing infrastructure.</p>
+                </div>
+
+                <div class="terms-clause">
+                    <h6><span>5.</span> AI Matching & Recruitment Decision Disclaimer</h6>
+                    <p>The AI Job Description Matcher and fit score indicators are provided as algorithmic analytical aids. <strong>SVASTIK UNIVERSE</strong> disclaims all warranties regarding employment outcomes. Final recruitment, interviewing, and hiring decisions remain the exclusive responsibility of the employing organization.</p>
+                </div>
+
+                <div class="terms-clause">
+                    <h6><span>6.</span> Updates & Jurisdiction</h6>
+                    <p><strong>SVASTIK UNIVERSE</strong> reserves the right to enhance, upgrade, or revise these terms periodically. Continued utilization of the service following modifications constitutes binding acceptance of the amended terms.</p>
+                </div>
+            </div>
+            <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.75rem; color: var(--text-dim);">© 2026 SVASTIK UNIVERSE. All Rights Reserved.</span>
+                <button class="tp-btn tp-btn-glass modal-close-btn" data-modal="termsModal">Acknowledge & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Privacy & Candidate Rights Modal Overlay — SVASTIK UNIVERSE -->
+    <div id="privacyModal" class="tp-modal-overlay">
+        <div class="tp-modal-box" style="max-width: 800px;">
+            <div class="tp-modal-header">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="brand-logo-glow" style="width: 38px; height: 38px; border-radius: 10px; font-size: 1.1rem;">🔒</div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800;">Privacy & Candidate Rights</h4>
+                        <span style="font-size: 0.72rem; color: var(--accent-emerald); font-weight: 700;">SVASTIK UNIVERSE • DATA GOVERNANCE</span>
+                    </div>
+                </div>
+                <button class="tp-btn-icon modal-close-btn" data-modal="privacyModal">✕</button>
+            </div>
+            <div class="tp-modal-body" style="max-height: 65vh; overflow-y: auto;">
+                <div class="terms-clause">
+                    <h6><span>🔒</span> Data Confidentiality Guarantee</h6>
+                    <p><strong>SVASTIK UNIVERSE</strong> enforces zero data sharing. All resumes processed through TalentPulse AI remain strictly confidential to your local instance or designated enterprise database.</p>
+                </div>
+                <div class="terms-clause">
+                    <h6><span>🗑️</span> Right to Erasure (GDPR / CCPA)</h6>
+                    <p>Candidate profiles can be permanently purged at any time via the single-click candidate deletion tool in the candidate feed or profile modal. Deletion purges both relational records and physical files.</p>
+                </div>
+                <div class="terms-clause">
+                    <h6><span>🛡️</span> Security & Storage Architecture</h6>
+                    <p>Files are stored with timestamped unique slugs in the local/cloud storage bucket with sanitization applied to prevent injection attacks and directory traversal vulnerabilities.</p>
+                </div>
+            </div>
+            <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.75rem; color: var(--text-dim);">Candidate Confidentiality First</span>
+                <button class="tp-btn tp-btn-glass modal-close-btn" data-modal="privacyModal">Close</button>
             </div>
         </div>
     </div>

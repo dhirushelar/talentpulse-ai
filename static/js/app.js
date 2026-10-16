@@ -161,6 +161,42 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
+        // Terms and Conditions Modal Triggers
+        const openTermsModalBtn = document.getElementById("openTermsModalBtn");
+        if (openTermsModalBtn) {
+            openTermsModalBtn.addEventListener("click", () => openModal("termsModal"));
+        }
+
+        // Privacy Modal Triggers
+        const openPrivacyModalBtn = document.getElementById("openPrivacyModalBtn");
+        if (openPrivacyModalBtn) {
+            openPrivacyModalBtn.addEventListener("click", () => openModal("privacyModal"));
+        }
+
+        // Footer Shortcut Buttons
+        document.querySelectorAll(".footer-open-jd-btn").forEach(btn => {
+            btn.addEventListener("click", () => openModal("jdMatchModal"));
+        });
+
+        document.querySelectorAll(".footer-open-compare-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (selectedForCompare.size >= 2) {
+                    openModal("compareModal");
+                    generateComparisonMatrix();
+                } else {
+                    alert("Please select at least 2 candidate cards using the checkboxes in the candidate feed to compare them.");
+                }
+            });
+        });
+
+        // Back to top smooth scroll
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        if (backToTopBtn) {
+            backToTopBtn.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
+
         document.querySelectorAll(".modal-close-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 const modalId = btn.dataset.modal;
