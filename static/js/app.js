@@ -219,6 +219,10 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const res = await fetch(`${API_BASE}/api/seed`, { method: "POST" });
                 const data = await res.json();
+                if (!res.ok || data.success === false) {
+                    alert(data.error || data.message || "Failed to load demo candidates.");
+                    return;
+                }
                 if (window.confetti) {
                     window.confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
                 }
