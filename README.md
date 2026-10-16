@@ -25,6 +25,13 @@
 [![License](https://img.shields.io/badge/Copyright-SVASTIK%20UNIVERSE-8B5CF6?style=for-the-badge)](https://github.com/dhirushelar/talentpulse-ai)
 
 <br/>
+
+<p align="center">
+  <a href="https://talentpulse-ai-r037.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/🌐%20LIVE%20CLOUD%20APP-talentpulse--ai--r037.onrender.com-00C7B7?style=for-the-badge&logo=render&logoColor=white" alt="Live Cloud Demo" />
+  </a>
+</p>
+
 </div>
 
 <br/>
