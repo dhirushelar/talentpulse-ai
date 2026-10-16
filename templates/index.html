@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentPulse AI — Intelligent Resume Parser & Talent Analytics</title>
+    <script>
+        // If opened as a local file, redirect to the live running Flask server
+        if (window.location.protocol === 'file:') {
+            window.location.href = 'http://127.0.0.1:5000';
+        }
+    </script>
+    <!-- Relative & Absolute CSS Links for Dual Compatibility (Flask & Static File) -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <!-- Chart.js with Fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- Ambient Glowing Gradient Mesh -->
+    <div class="ambient-glow-container">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+        <div class="ambient-blob blob-3"></div>
+    </div>
+
+    <!-- Modern Glassmorphic Top Navigation -->
+    <nav class="tp-nav">
+        <div class="tp-nav-container">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-wrapper">
+                <div class="brand-icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                </div>
+                <div>
+                    <div class="brand-title">
+                        <span>Talent<span class="gradient-text">Pulse</span></span>
+                        <span class="ai-chip">AI</span>
+                    </div>
+                    <div class="brand-subtitle">Autonomous Resume Parser & Talent Analytics</div>
+                </div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <!-- Database Engine Status Pill -->
+                <div class="db-pill">
+                    <span class="pulsing-dot"></span>
+                    <span id="dbDialectBadge">Database Engine: <strong style="color: var(--accent-emerald);">Active</strong></span>
+                </div>
+
+                <!-- Job Matcher Launcher -->
+                <button id="openJdModalBtn" class="tp-btn tp-btn-glass">
+                    <svg style="width:16px;height:16px;fill:var(--accent-amber);" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                    <span>JD Matcher</span>
+                </button>
+
+                <!-- Compare Candidates Button -->
+                <button id="compareBtn" class="tp-btn tp-btn-glass" disabled>
+                    <svg style="width:16px;height:16px;fill:var(--accent-cyan);" viewBox="0 0 24 24"><path d="M4 2h16c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 4v14h7V6H4zm9 14h7V6h-7v14z"/></svg>
+                    <span>Compare</span>
+                    <span id="compareCountBadge" class="ai-chip" style="background: var(--primary);">0</span>
+                </button>
+
+                <!-- Export CSV Button -->
+                <a href="/api/export/csv" class="tp-btn tp-btn-glass" title="Export Candidates as CSV">
+                    <svg style="width:16px;height:16px;fill:var(--accent-emerald);" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    <span>Export CSV</span>
+                </a>
+
+                <!-- Dark / Light Mode Switcher -->
+                <button id="themeToggleBtn" class="tp-btn-icon" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <span id="themeIcon">☀️</span>
+                </button>
+
+                <!-- Quick Upload Trigger Button -->
+                <a href="#uploadZone" class="tp-btn tp-btn-primary">
+                    <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                    <span>Upload Resumes</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Workspace Container -->
+    <main class="tp-container">
+
+        <!-- Top Animated Bento KPI Cards -->
+        <section class="kpi-grid">
+            <!-- 1. Total Resumes -->
+            <div class="bento-card">
+                <div class="kpi-header">
+                    <span class="kpi-title">Candidate Pool</span>
+                    <div class="kpi-icon-badge badge-indigo">
+                        👥
+                    </div>
+                </div>
+                <div class="kpi-number" id="kpiTotalResumes">0</div>
+                <div class="kpi-meta">
+                    <span style="color: var(--accent-emerald);">●</span> Indexed & Searchable Profiles
+                </div>
+            </div>
+
+            <!-- 2. Dominant Skill -->
+            <div class="bento-card">
+                <div class="kpi-header">
+                    <span class="kpi-title">Dominant Competency</span>
+                    <div class="kpi-icon-badge badge-emerald">
+                        ⚡
+                    </div>
+                </div>
+                <div class="kpi-number" id="kpiTopSkill" style="font-size: 1.8rem;">-</div>
+                <div class="kpi-meta">
+                    <span style="color: var(--primary);">▲</span> Highest Frequency Skill
+                </div>
+            </div>
+
+            <!-- 3. Experience Density -->
+            <div class="bento-card">
+                <div class="kpi-header">
+                    <span class="kpi-title">Experience Density</span>
+                    <div class="kpi-icon-badge badge-cyan">
+                        💼
+                    </div>
+                </div>
+                <div class="kpi-number"><span id="kpiAvgExperience">0.0</span> <span style="font-size: 1rem; color: var(--text-muted); font-weight: 500;">years avg</span></div>
+                <div class="kpi-meta">
+                    <span style="color: var(--accent-cyan);">●</span> Computed across work history
+                </div>
+            </div>
+
+            <!-- 4. Shortlisted Candidates -->
+            <div class="bento-card">
+                <div class="kpi-header">
+                    <span class="kpi-title">Shortlisted Talent</span>
+                    <div class="kpi-icon-badge badge-amber">
+                        ⭐
+                    </div>
+                </div>
+                <div class="kpi-number" id="kpiShortlistedCount">0</div>
+                <div class="kpi-meta">
+                    <span style="color: var(--accent-amber);">●</span> Ready for interview screening
+                </div>
+            </div>
+        </section>
+
+        <!-- Two-Column Workspace Layout -->
+        <div class="workspace-grid">
+            
+            <!-- Left Column: Upload Dropzone & Analytics Chart -->
+            <aside>
+                <!-- Upload Dropzone Card -->
+                <div class="bento-card" id="uploadZone" style="margin-bottom: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0;">Neural Parser</h3>
+                            <span style="font-size: 0.72rem; color: var(--text-muted);">PDFPlumber layout + spaCy NER</span>
+                        </div>
+                        <span class="ai-chip" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">Auto-Classify</span>
+                    </div>
+
+                    <!-- Interactive Drag & Drop Area -->
+                    <div id="dropZone" class="upload-dropzone">
+                        <div class="dropzone-icon-circle">
+                            📁
+                        </div>
+                        <h4 class="dropzone-heading">Drag & Drop Resumes</h4>
+                        <p class="dropzone-sub">Supports PDF, DOCX, and TXT files (Up to 16 MB each)</p>
+                        <button type="button" id="browseFilesBtn" class="tp-btn tp-btn-glass" style="margin: 0 auto;">
+                            <span>Browse Files</span>
+                        </button>
+                        <input type="file" id="resumeFileInput" multiple accept=".pdf,.docx,.doc,.txt" style="display: none;">
+                    </div>
+
+                    <!-- Queue List & Upload Button -->
+                    <div id="uploadQueueContainer" style="display: none; margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.78rem;">
+                            <strong>Selected Files (<span id="fileCount">0</span>)</strong>
+                            <button id="clearQueueBtn" style="background: none; border: none; color: var(--accent-rose); cursor: pointer; font-size: 0.75rem;">Clear All</button>
+                        </div>
+                        <ul id="fileQueueList" class="queue-list"></ul>
+                        <button id="startUploadBtn" class="tp-btn tp-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+                            <span>⚡ Extract & Index Resumes</span>
+                        </button>
+                    </div>
+
+                    <!-- Animated Progress Bar -->
+                    <div id="parseProgressContainer" style="display: none; margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem;">
+                            <span id="progressStatusText" style="color: var(--primary); font-weight: 600;">Extracting text with PDFPlumber...</span>
+                            <span id="progressPercent" style="font-weight: 700;">0%</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+                            <div id="parseProgressBar" style="height: 100%; width: 0%; background: var(--primary-gradient); transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Alerts -->
+                    <div id="uploadAlert" style="display: none; padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.78rem; margin-top: 1rem;"></div>
+                </div>
+
+                <!-- Competencies Chart Card -->
+                <div class="bento-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0;">In-Demand Competencies</h4>
+                        <span class="meta-chip">Real-Time</span>
+                    </div>
+                    <div style="height: 220px; position: relative;">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Column: Search, Pipeline Status & Candidate Feed -->
+            <section>
+                
+                <!-- Search & Filters Bento Card -->
+                <div class="search-filter-card">
+                    <div class="search-row">
+                        <!-- Semantic Search -->
+                        <div class="tp-input-group">
+                            <span class="tp-input-icon">🔍</span>
+                            <input type="text" id="searchInput" class="tp-input" placeholder="Search by name, role, skills, keywords...">
+                        </div>
+
+                        <!-- Skill Filter -->
+                        <div>
+                            <select id="skillFilterSelect" class="tp-select">
+                                <option value="">All Skills</option>
+                            </select>
+                        </div>
+
+                        <!-- Education Filter -->
+                        <div>
+                            <select id="degreeFilterSelect" class="tp-select">
+                                <option value="">All Degrees</option>
+                                <option value="Bachelor">Bachelor's</option>
+                                <option value="Master">Master's</option>
+                                <option value="Ph.D">Ph.D.</option>
+                            </select>
+                        </div>
+
+                        <!-- Experience Filter -->
+                        <div>
+                            <select id="expFilterSelect" class="tp-select">
+                                <option value="">Any Exp</option>
+                                <option value="1">1+ Year</option>
+                                <option value="3">3+ Years</option>
+                                <option value="5">5+ Years</option>
+                                <option value="8">8+ Years</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Status Tabs & Sort Controls -->
+                    <div class="status-tabs-wrapper">
+                        <!-- Filter Tabs -->
+                        <div class="pipeline-pills" id="statusFilterTabs">
+                            <button class="pipeline-pill-btn active" data-status="">All (<span id="countAll">0</span>)</button>
+                            <button class="pipeline-pill-btn" data-status="New">New</button>
+                            <button class="pipeline-pill-btn" data-status="Shortlisted">Shortlisted</button>
+                            <button class="pipeline-pill-btn" data-status="Interviewing">Interviewing</button>
+                            <button class="pipeline-pill-btn" data-status="Hired">Hired</button>
+                            <button class="pipeline-pill-btn" data-status="Rejected">Rejected</button>
+                        </div>
+
+                        <!-- Sort By & Refresh -->
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <select id="sortBySelect" class="tp-select" style="width: auto; padding: 0.45rem 0.8rem;">
+                                <option value="parsed_at:desc">Newest First</option>
+                                <option value="name:asc">Name (A-Z)</option>
+                                <option value="total_experience_years:desc">Highest Experience</option>
+                            </select>
+                            <button id="refreshListBtn" class="tp-btn-icon" title="Refresh Candidate List">
+                                🔄
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Filter Pills -->
+                    <div id="activeFiltersContainer" style="display: none; margin-top: 0.85rem; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <span style="font-size: 0.75rem; color: var(--text-dim);">Active Filters:</span>
+                        <div id="filterPills" style="display: flex; gap: 0.35rem; flex-wrap: wrap;"></div>
+                        <button id="resetFiltersBtn" style="background: none; border: none; color: var(--text-dim); font-size: 0.75rem; cursor: pointer;">Clear All</button>
+                    </div>
+                </div>
+
+                <!-- Feed Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                    <div>
+                        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0;">Candidate Directory</h3>
+                        <span style="font-size: 0.78rem; color: var(--text-muted);">Showing <strong id="candidateCountDisplay" style="color: var(--accent-cyan);">0</strong> indexed candidate profiles</span>
+                    </div>
+
+                    <!-- JD Match Banner -->
+                    <div id="matchBanner" style="display: none; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.78rem; color: var(--accent-amber);">
+                        <span>⚡ JD Fit Match Active</span>
+                        <button id="clearMatchBtn" style="background: none; border: none; color: var(--accent-amber); cursor: pointer;">✕</button>
+                    </div>
+                </div>
+
+                <!-- Skeleton Loading State -->
+                <div id="candidatesLoading" style="display: none;">
+                    <div class="bento-card" style="height: 120px; margin-bottom: 1rem; opacity: 0.5;"></div>
+                    <div class="bento-card" style="height: 120px; margin-bottom: 1rem; opacity: 0.4;"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="candidatesEmptyState" class="bento-card" style="text-align: center; padding: 3rem 1.5rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📂</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 0.35rem;">No Candidate Profiles Found</h4>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0 0 1.25rem;">Upload resumes above or seed test samples to explore candidate profiles.</p>
+                    <label for="resumeFileInput" class="tp-btn tp-btn-primary" style="display: inline-flex; cursor: pointer;">
+                        <span>Upload First Resume</span>
+                    </label>
+                </div>
+
+                <!-- Candidates List -->
+                <div id="candidatesList" class="candidate-feed"></div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <!-- 1. Candidate Full Profile Modal Overlay -->
+    <div id="candidateModal" class="tp-modal-overlay">
+        <div class="tp-modal-box">
+            <div class="tp-modal-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="candidate-avatar" id="modalAvatar" style="width: 58px; height: 58px; font-size: 1.3rem;">JD</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <h3 id="modalName" style="margin: 0; font-size: 1.3rem; font-weight: 800;">Candidate Name</h3>
+                            <select id="modalStatusSelect" class="tp-select" style="width: auto; padding: 0.25rem 0.75rem; font-size: 0.72rem; border-radius: 20px;">
+                                <option value="New">Status: New</option>
+                                <option value="Shortlisted">Status: Shortlisted</option>
+                                <option value="Interviewing">Status: Interviewing</option>
+                                <option value="Hired">Status: Hired</option>
+                                <option value="Rejected">Status: Rejected</option>
+                            </select>
+                        </div>
+                        <div class="contact-row" style="margin-top: 0.35rem;">
+                            <span id="modalEmail">📧 email@example.com</span>
+                            <span id="modalPhone">📞 Phone</span>
+                            <span id="modalLocation">📍 Location</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="tp-btn-icon modal-close-btn" data-modal="candidateModal">✕</button>
+            </div>
+            
+            <div class="tp-modal-body">
+                <!-- Executive Summary -->
+                <div class="bento-card" style="margin-bottom: 1.25rem; padding: 1.25rem;">
+                    <h5 style="font-size: 0.88rem; font-weight: 700; color: var(--primary); margin: 0 0 0.5rem;">Executive Summary</h5>
+                    <p id="modalSummary" style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.6;"></p>
+                </div>
+
+                <!-- Recruiter Notes -->
+                <div class="bento-card" style="margin-bottom: 1.25rem; padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h5 style="font-size: 0.88rem; font-weight: 700; color: var(--accent-amber); margin: 0;">Recruiter Internal Notes</h5>
+                        <span id="notesSavedIndicator" style="display: none; font-size: 0.72rem; color: var(--accent-emerald);">✓ Saved</span>
+                    </div>
+                    <textarea id="modalNotesTextarea" class="tp-input" rows="2" placeholder="Add confidential recruiter notes or interview comments..."></textarea>
+                </div>
+
+                <!-- Competencies Grid -->
+                <div class="bento-card" style="margin-bottom: 1.25rem; padding: 1.25rem;">
+                    <h5 style="font-size: 0.88rem; font-weight: 700; color: var(--accent-cyan); margin: 0 0 0.75rem;">Categorized Competencies</h5>
+                    <div id="modalCategorizedSkills"></div>
+                </div>
+
+                <!-- Work Experience & Education -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                    <div class="bento-card" style="padding: 1.25rem;">
+                        <h5 style="font-size: 0.88rem; font-weight: 700; color: var(--primary); margin: 0 0 0.75rem;">Work Experience Timeline</h5>
+                        <div id="modalExperienceTimeline" class="timeline-container"></div>
+                    </div>
+                    <div class="bento-card" style="padding: 1.25rem;">
+                        <h5 style="font-size: 0.88rem; font-weight: 700; color: var(--accent-emerald); margin: 0 0 0.75rem;">Academic Credentials</h5>
+                        <div id="modalEducationList"></div>
+                    </div>
+                </div>
+
+                <!-- Raw Extracted Text -->
+                <div class="bento-card" style="padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h5 style="font-size: 0.88rem; font-weight: 700; margin: 0;">Raw Parser Extracted Text</h5>
+                        <button id="copyRawTextBtn" class="tp-btn tp-btn-glass" style="font-size: 0.72rem; padding: 0.35rem 0.85rem;">Copy Text</button>
+                    </div>
+                    <pre id="modalRawText" style="background: rgba(0, 0, 0, 0.4); padding: 1rem; border-radius: 12px; font-size: 0.75rem; color: #a5f3fc; max-height: 250px; overflow-y: auto; font-family: 'JetBrains Mono', monospace;"></pre>
+                </div>
+            </div>
+
+            <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
+                <a id="modalDownloadBtn" href="#" class="tp-btn tp-btn-glass">Download Original Resume</a>
+                <button class="tp-btn tp-btn-glass modal-close-btn" data-modal="candidateModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. AI Job Description Matcher Modal Overlay -->
+    <div id="jdMatchModal" class="tp-modal-overlay">
+        <div class="tp-modal-box" style="max-width: 700px;">
+            <div class="tp-modal-header">
+                <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: var(--accent-amber);">⚡</span> AI Job Description Fit Matcher
+                </h4>
+                <button class="tp-btn-icon modal-close-btn" data-modal="jdMatchModal">✕</button>
+            </div>
+            <div class="tp-modal-body">
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0 0 1rem;">
+                    Paste a Job Description or required qualifications below. The AI evaluates all candidates in the database, calculates composite fit scores (0–100%), and highlights matched and missing skills.
+                </p>
+                <textarea id="jdInputText" class="tp-input" rows="7" style="padding: 0.85rem; font-size: 0.82rem;" placeholder="e.g. We are looking for a Senior Backend Developer with 3+ years of experience in Python, Flask, PostgreSQL, Docker, AWS, Redis, and Microservices..."></textarea>
+            </div>
+            <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.75rem; color: var(--text-dim);">Evaluates competencies & experience density</span>
+                <button id="runJdMatchBtn" class="tp-btn tp-btn-primary">
+                    <span>⚡ Calculate Fit Scores</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Side-by-Side Comparison Modal Overlay -->
+    <div id="compareModal" class="tp-modal-overlay">
+        <div class="tp-modal-box" style="max-width: 1000px;">
+            <div class="tp-modal-header">
+                <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: var(--accent-cyan);">⚖️</span> Candidate Comparison Matrix
+                </h4>
+                <button class="tp-btn-icon modal-close-btn" data-modal="compareModal">✕</button>
+            </div>
+            <div class="tp-modal-body" id="compareMatrixContainer"></div>
+            <div style="padding: 1rem 1.75rem; border-top: 1px solid var(--border-glass); display: flex; justify-content: flex-end;">
+                <button class="tp-btn tp-btn-glass modal-close-btn" data-modal="compareModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Controller JS with Dual Linking -->
+    <script src="/static/js/app.js"></script>
+    <script src="../static/js/app.js"></script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>

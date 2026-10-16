@@ -1,0 +1,25 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.pytest_cache/
+
+# Database & Local Env
+*.db
+.env
+
+# Uploads directory contents (preserve the folder)
+uploads/*
+!uploads/.gitkeep
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
